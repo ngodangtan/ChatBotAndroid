@@ -4,8 +4,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.message_item.view.*
 import ngodangtan.com.chatbot.R
 import ngodangtan.com.chatbot.data.Message
+import ngodangtan.com.chatbot.utils.Constants.RECEIVE_ID
 import ngodangtan.com.chatbot.utils.Constants.SEND_ID
 
 class MessagingAdapter: RecyclerView.Adapter<MessagingAdapter.MessageViewHolder>() {
@@ -30,10 +32,19 @@ class MessagingAdapter: RecyclerView.Adapter<MessagingAdapter.MessageViewHolder>
 
         when (currentMessage.id){
             SEND_ID -> {
-//                holder.itemView.tv_message.apply {
-//
-//                }
+                holder.itemView.tv_message.apply {
+                    text = currentMessage.message
+                    visibility = View.VISIBLE
+                }
+                holder.itemView.tv_bot_message.visibility = View.GONE
 
+            }
+            RECEIVE_ID -> {
+                holder.itemView.tv_bot_message.apply {
+                    text = currentMessage.message
+                    visibility = View.VISIBLE
+                }
+                holder.itemView.tv_message.visibility = View.GONE
             }
 
         }
@@ -41,5 +52,11 @@ class MessagingAdapter: RecyclerView.Adapter<MessagingAdapter.MessageViewHolder>
 
     override fun getItemCount(): Int {
         return messagesList.size
+    }
+
+    fun insertMessage(message: Message){
+        this.messagesList.add(message)
+        notifyItemInserted(messagesList.size)
+        notifyDataSetChanged()
     }
 }
